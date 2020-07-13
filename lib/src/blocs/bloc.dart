@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter_form_bloc/src/blocs/validators.dart';
+import 'package:rxdart/rxdart.dart';
 
 class Bloc extends Object with Validators {
-  final _email = StreamController<String>();
-  final _password = StreamController<String>();
+  final _email = StreamController<String>.broadcast();
+  final _password = StreamController<String>.broadcast();
+
+  Stream<bool> get submitValid =>
+      Rx.combineLatest2(email, password, (e, p) => true);
 
   Stream<String> get email => _email.stream.transform(validateEmail);
 
